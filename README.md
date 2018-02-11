@@ -354,7 +354,7 @@ et récupérons le message précédemment renseigné:
 
 ``` 
 
-https://www.slideshare.net/BackeliteAgency/graph-ql-par-andy-gigon
+
 
 ## Apollo
 
