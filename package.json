@@ -1,0 +1,20 @@
+{
+  "name": "merngod",
+  "version": "0.0.1",
+  "description": "Nous nous proposons ici de mettre en place une plateforme opensource opendata (OD) à l'aide de",
+  "main": "index.js",
+  "scripts": {
+    "server1": "nodemon simple_server.js",
+    "server2": "nodemon simple_server_no_database.js",
+    "server3": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "Benfarhat Elyes <benfarhat.elyes@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.16.2",
+    "express-graphql": "^0.6.11",
+    "graphql": "^0.13.0",
+    "graphql-tools": "^2.20.2"
+  }
+}

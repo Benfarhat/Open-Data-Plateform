@@ -1,0 +1,176 @@
+# SCHEMA
+# DCAT Schema
+# ________________________________________________________________________________________
+#
+# We should also see the possibility of integrating the new schema
+# In Tunisia as in Algeria, two languages are used to know Arabic and French
+# In Libya and Egypt, it's more like Arabic and English.
+# In both cases, using Arabic with a second language is not supported 
+# by DCAT, OPS or DCAT-AP
+#
+# ________________________________________________________________________________________
+
+#####################
+#   entry points    #
+#####################
+
+## Read entry point
+
+# Equivalent to GET in REST
+
+# Note that "!" mean that the element must be provided (required)
+# and [Element] return an array of elements
+
+type Query {
+    """
+    Catalog lvl
+    """
+    Catalog(id: ID!): Catalog
+    Catalogs(limit: Int = 10, sortField: String, sortOrder: String): [Catalog]
+
+    """
+    Dataset lvl
+    """
+    Dataset(id: ID!): Catalog
+    Datasets(catalogId: ID, limit: Int = 10, sortField: String, sortOrder: String): [Dataset]
+
+    """
+    Distribution lvl
+    """
+    Distribution(id: ID!): Distribution
+    Distributions(datasetId:ID = null, limit: Int = 10, sortField: String, sortOrder: String): [Distribution]
+}
+
+# Equivalent to POST, UPDATE ans DELETE in REST
+type Mutation {
+    
+    addCatalog(title: String!, description:String!): Catalog
+    addDataset(title: String!, description:String!, catalogId: Int!): Dataset
+    addDistribution(title: String!, description:String!, datasetId: Int!): Distribution
+
+    updateCatalog(id: ID!, title: String!, description:String!): Catalog
+    updateDataset(id: ID!, title: String!, description:String!, catalogId: Int!): Dataset
+    updateDistribution(id: ID!, title: String!, description:String!, datasetId: Int!): Distribution
+
+    removeCatalog(id: ID!): Boolean
+    removeDataset(id: ID!): Boolean
+    removeDistribution(id: ID!): Boolean
+
+
+    addLanguage(name: String): Language
+    addFormat(name: String): Format
+    addAgent(name: String, mbox:String): Agent
+    
+    updateLanguage(id: ID!, name: String): Language
+    updateFormat(id: ID!, name: String): Format
+    updateAgent(id: ID!, name: String, mbox:String): Agent
+
+    removeLanguage(id: ID!): Language
+    removeFormat(id: ID!): Format
+    removeAgent(id: ID!): Agent
+}
+
+type Subscription {
+    CatalogPublished(userId: ID!): Catalog
+    DatasetPublished(userId: ID!): Dataset
+    DistributionPublished(userId: ID!): Distribution
+}
+
+##################
+#  custom types  #
+##################
+
+## Write entry points
+
+type Language {
+    id: ID!
+    name: String!
+}
+
+type Format {
+    id: ID!
+    name: String! # text/csv
+}
+
+type Catalog {
+    id: ID!
+# <<Mandatory>>    
+    title: String!
+    description: String!
+# <<Recommended>>
+    issued: Date
+    modified: Date
+    language: Language
+    license: String
+    rights: String
+    spatial: String
+    homepage: String
+    dataset: [Dataset]
+    record: [Record]
+}
+
+type Record {
+    id: ID!
+# <<Mandatory>>    
+    title: String!
+    description: String!
+# <<Recommended>>
+    issued: Date 
+    modified: Date
+}
+
+type Dataset {
+    id: ID!
+# <<Mandatory>>    
+    title: String!
+    description: String!
+    catalogId: Int!
+# <<Recommended>>
+    issued: Date 
+    modified: Date 
+    identifier: Url 
+    keyword: [String]
+    language: [Language]
+    contactPoint: Agent
+    temporal: String
+    spatial: String
+    accrualPeriodicity: String
+    publisher: Agent
+    landingPage: String
+    theme : [String]
+    distribution: [Distribution] 
+}
+
+type Agent {
+    id: ID!
+    name: String
+    mbox: String
+}
+
+## Pub/Sub entry points
+
+type Distribution {
+    id: ID!
+# <<Mandatory>>    
+    title: String!
+    description: String!
+    datasetId: Int!
+# <<Recommended>>
+    issued: Date 
+    modified: Date 
+    license:  String
+    rights:  String
+    accessURL: Url
+    downloadURL:  Url 
+    mediaType:  String 
+    format: Format
+    byteSize: Int 
+}
+
+#######################
+# custom scalar types #
+#######################
+
+scalar Url
+scalar Date
+
