@@ -354,6 +354,9 @@ et récupérons le message précédemment renseigné:
 
 ``` 
 
+### Subscription
+
+C'est ce qui nous permettra de nous abonner pour avoir des renseignements en temps réel lors de l'appel à un mutateur
 
 
 ## Apollo
