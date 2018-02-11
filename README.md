@@ -10,7 +10,7 @@ Nous nous proposons ici de mettre en place une plateforme opensource opendata (O
 
 **Back End**
 
-- Apollo/GraphQL - G 
+- Apollo/GraphQL - G
 - MongoDB/Mongoose - M
 - Express - E
 - NodeJS - N
@@ -24,7 +24,7 @@ Nous nous proposons ici de mettre en place une plateforme opensource opendata (O
 
 ### Installation et test de GraphQL
 
-GraphQL est une technologie backend, c'est une alternative aux API REST qui va nous permettre d'accèder à nos données même si leur stockage est distribué, 
+GraphQL est une technologie backend, c'est une alternative aux API REST qui va nous permettre d'accèder à nos données même si leur stockage est distribué,
 GraphQL a été implémenté en plusieurs language (javascript, elixir, ruby, python et java), celle que nous utiliserons est graphQL.js.
 
 Noté que GraphQL est une technologie issue est open sourcé par Facebook, son équivalent de chez Netflix est Falcor qui a une approche similaire mais qui se repose
@@ -135,7 +135,7 @@ par exemple: { test } on obtient:
 }
 ```
 
-Notez que GraphiQL offre une autocomplétion (que l'on peut activer notamment par un CTRL+ESPACE) et vous renseigne sur la structure des données de l'API. Il gère également les erreurs, 
+Notez que GraphiQL offre une autocomplétion (que l'on peut activer notamment par un CTRL+ESPACE) et vous renseigne sur la structure des données de l'API. Il gère également les erreurs,
 et tente d'extrapoler ce que vous vouliez réellement faire.
 en effet si on renseigne la requête suivant: { wronrequest }
 on obtient:
@@ -169,7 +169,7 @@ A présent améliorons notre serveur en permettant d'avoir plus d'arguments. Les
 - String
 - Int
 - Float
-- Boolean 
+- Boolean
 - ID
 
 Chacun peut être null sauf si un point d'exclamation est ajouté, par exemple Int! ou String!
@@ -205,7 +205,7 @@ var root = {
         case 'moins': result.push(start-i*step); break;
         case 'diviser': result.push(start/i*step); break;
         case 'multiplier': result.push(start*i*step); break;
-        default: result.push(start+i*step); 
+        default: result.push(start+i*step);
       }
     }
     return result;
@@ -273,7 +273,7 @@ var root = {
         case 'moins': result.push(start-i*step); break;
         case 'diviser': result.push(start/i*step); break;
         case 'multiplier': result.push(start*i*step); break;
-        default: result.push(start+i*step); 
+        default: result.push(start+i*step);
       }
     }
     return result;
@@ -352,7 +352,7 @@ et récupérons le message précédemment renseigné:
   }
 }
 
-``` 
+```
 
 ### Subscription
 
@@ -371,7 +371,77 @@ comme par exemple:
 - Gestion des websockets pour les abonnements GraphQL permettant des mises à jour en temps réel
 - Pagination pour les collections
 
-Toutes ces fonctionalités sont intégrés aux clients GraphQL Relay et Apollo. Mais il a fallut faire un choix, 
+Toutes ces fonctionalités sont intégrés aux clients GraphQL Relay et Apollo. Mais il a fallut faire un choix,
 et notre choix c'est porté sur Apollo  car il fonctionne avec tout les frameworks UI ci dessus cités alors que Relay est dédié à React.
 
 Plus d'info [ici](https://blog.graph.cool/relay-vs-apollo-comparing-graphql-clients-for-react-apps-b40af58c1534)
+
+
+## MongoDB et Mongoose
+
+### Introduction à MongoDB
+
+MongoDB (de Humongous qui veut dire énorme) est une base de donnée open source non relationelle, orienté document (l'unité de base).
+Par analogie, à la terminologie SQL:
+| SQL        | MongoDB           |
+| ------------- |:-------------:|
+| Base de données      | Base de données |
+| Table      | Collection |
+| Ligne / Enregistrement      | Document |
+| Colonne      | Champ |
+| Index      | Index |
+| Jointure      | Imbrication ou référence |
+| Clef primaire (peut être multiple)      | Clef primaire unique (représenté par le champ _id) |
+
+
+
+Les documents n'ont pas forcément de schéma, ils sont vues comme des ensembles de couples clef/valeur au format JSON (JSON-Like) stocké physiquement
+sous la forme de document BSON (Binary JSON)
+Notez que dans la réalité, les documents d'une même collection sont relativement homogéne et adopte un structure similaire.
+
+Cette base de données dit NoSQL (Not Only SQL) permet d'avoir des bases de données largement distribuée.
+Les BD NoSQL sont une solution évolutive et disponible développée en réponse à l'augmentation exponentielle des données.
+Contrairement au base de données relationelle basées sur le principe ACID (Atomicité, Consistence, Isolation & Durabilité),
+les bases de données MongoDB suivent plutôt le paradigme CAP (Coherence, Haut disponibilité / Availability et Tolérance au partionnement / Partition Tolerance)
+Not Only SQL ne veut pas dire pas d'SQL mais SQL et d'autre langage de manipulation et de requête.
+Cerise sur le gateau, MongoDB utilise javascript comme langage natif
+
+Il y a 4 grandes familles de base de données NoSQL:
+
+- Clé/valeur: Redis, Riak, Voldemort (LinkedIn), DynamoDB (Amazon), Azure Table Storage, BerkeleyDB
+- Orienté colonne: HBase (Hadoop), Cassandra (Facebook, Twitter), BigTable (Google)
+- Orienté document: CouchDB (Apache), RavenDB (.NET/Windows), MongoDB (SourceForge)
+- Orienté graphe: Neo4J, InfiniteGraph, OrentDB
+
+La relation entre les données se fait par:
+
+- Références (inclusion de lien ou référence d'une autre document) / Modèle de données normalisés
+- Imbrication des documents en incluant un document dans un champ ou tableau / Modèle de données dénormalisés
+
+Comment choisit-on entre les deux modèles:
+
+- Si on risque de dupliquer les données, alors on utilise la référence: Relation Many-to-many
+- Si c'est des relations de type contain et hierarchique on utilise les données imbriquées: Relation One-to-one et One-to-Many
+
+Plus d'info [ici](https://mongoteam.gitbooks.io/introduction-a-mongodb/content/01-presentation/index.html) et [ici](https://fr.slideshare.net/LiliaSfaxi/bigdatachp4-putting-it-all-together)
+
+### Implémentation de MongoDB
+
+#### Installation
+
+Selon le système d'exploitation de votre serveur vous trouverez [ici](https://docs.mongodb.com/manual/installation/#tutorials)
+les étapes d'installation à suivre.
+
+#### Auto-start
+
+MongoDB doit être bien évidemment installé mais également auto-starté. Vous pouvez sur votre Linux utiliser les commandes
+
+```
+systemctl start nom_du_service.service
+systemctl enable nom_du_service.service
+
+```
+
+#### Sécurité
+
+Suivre ces [étapes](https://scotch.io/@micwanyoike/getting-started-with-mongodb-in-linux)
