@@ -1,6 +1,6 @@
+const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const express = require('express');
 const graphqlHTTP = require('express-graphql');
 const { makeExecutableSchema } = require('graphql-tools');
 
@@ -144,6 +144,7 @@ const CatalogResolver = [
         Dataset: (_, { id }) => DatasetResolver.find(cat => cat.id == id),
         Datasets: (_, args, context) => {
             // console.log(context);
+            console.table(args);
             if(args.catalogId){
                 let { catalogId } = args
                 return DatasetResolver.filter(cat => cat.catalogId == catalogId)
@@ -167,7 +168,7 @@ const CatalogResolver = [
     Mutation: {
         addCatalog: (_, {title, description}) => {
             let nextID = CatalogResolver.reduce((id, cat) => Math.max(id,cat.id), -1) + 1;
-            console.log(nextID);
+            // console.log(nextID);
             let newCatalog = {
                 id: nextID,
                 title: title,
@@ -186,7 +187,7 @@ const CatalogResolver = [
         dataset: (catalog) => DatasetResolver.filter(dataset => dataset.catalogId == catalog.id)
     },
     Dataset: {
-        distribution: (distribution) => DistributionResolver.filter(distribution => distribution.datasetId == dataset.id)
+        distribution: (dataset) => DistributionResolver.filter(distribution => distribution.datasetId == dataset.id)
     }
 
 };

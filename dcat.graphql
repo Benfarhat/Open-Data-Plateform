@@ -31,7 +31,7 @@ type Query {
     """
     Dataset lvl
     """
-    Dataset(id: ID!): Catalog
+    Dataset(id: ID!): Dataset
     Datasets(catalogId: ID, limit: Int = 10, sortField: String, sortOrder: String): [Dataset]
 
     """
@@ -125,6 +125,7 @@ type Dataset {
     title: String!
     description: String!
     catalogId: Int!
+    #catalog: Catalog!
 # <<Recommended>>
     issued: Date 
     modified: Date 
@@ -155,6 +156,7 @@ type Distribution {
     title: String!
     description: String!
     datasetId: Int!
+    #dataset: Dataset!
 # <<Recommended>>
     issued: Date 
     modified: Date 
